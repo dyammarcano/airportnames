@@ -6,6 +6,7 @@ import (
 	"encoding/csv"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/render"
 	"github.com/jszwec/csvutil"
 	"net/http"
 	"strings"
@@ -35,6 +36,10 @@ type Airport struct {
 	HomeLink         string `json:"home_link" csv:"home_link"`
 	WikipediaLink    string `json:"wikipedia_link" csv:"wikipedia_link"`
 	Keywords         string `json:"keywords" csv:"keywords"`
+}
+
+func (hr Airport) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
 }
 
 func init() {
@@ -84,7 +89,7 @@ func main() {
 		for _, airport := range airports {
 			if airport.IataCode == iataCode {
 				w.WriteHeader(http.StatusOK)
-				
+				render.Render(w, r, airport)
 				return
 			}
 		}
